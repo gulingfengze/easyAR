@@ -1,0 +1,68 @@
+apply plugin: 'com.android.model.application'
+
+model {
+    android {
+        compileSdkVersion = 24
+        buildToolsVersion = "24.0.0"
+
+        defaultConfig.with {
+            applicationId = "com.example.billgao.armagazine"
+            minSdkVersion.apiLevel = 15
+            targetSdkVersion.apiLevel = 24
+            versionCode = 1
+            versionName = "1.0"
+        }
+    }
+    android.buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles.add(file("proguard-rules.pro"))
+        }
+    }
+    android.ndk {
+        moduleName = "ARMagazine"
+        cppFlags.add("-I${file("../package/include")}".toString())
+        cppFlags.add("-DANDROID")
+        cppFlags.add("-fexceptions")
+        cppFlags.add("-frtti")
+        stl = "gnustl_static"
+        ldLibs.add("log")
+        ldLibs.add("GLESv2")
+    }
+    android.productFlavors {
+        create("arm") {
+            ndk.with {
+                abiFilters.add("armeabi-v7a")
+            }
+        }
+    }
+    android.sources {
+        main {
+            jni {
+                dependencies {
+                    library file("../package/Android/libs/armeabi-v7a/libEasyAR.so") abi "armeabi-v7a"
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: '../package/Android/libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.0.0-beta1'
+    compile files('libs/MobCommons-2016.1222.1756.jar')
+    compile files('libs/MobTools-2016.1222.1756.jar')
+    compile files('libs/ShareSDK-Core-2.8.0.jar')
+    compile files('libs/ShareSDK-Email-2.8.0.jar')
+    compile files('libs/ShareSDK-Facebook-2.8.0.jar')
+    compile files('libs/ShareSDK-QZone-2.8.0.jar')
+    compile files('libs/ShareSDK-QQ-2.8.0.jar')
+    compile files('libs/ShareSDK-ShortMessage-2.8.0.jar')
+    compile files('libs/ShareSDK-SinaWeibo-2.8.0.jar')
+    compile files('libs/ShareSDK-TencentWeibo-2.8.0.jar')
+    compile files('libs/ShareSDK-Wechat-2.8.0.jar')
+    compile files('libs/ShareSDK-Wechat-Core-2.8.0.jar')
+    compile files('libs/ShareSDK-Wechat-Favorite-2.8.0.jar')
+    compile files('libs/ShareSDK-Wechat-Moments-2.8.0.jar')
+}
